@@ -1,0 +1,6 @@
+README.md
+setup.py
+LLMOPS.egg-info/PKG-INFO
+LLMOPS.egg-info/SOURCES.txt
+LLMOPS.egg-info/dependency_links.txt
+LLMOPS.egg-info/top_level.txt
