@@ -109,6 +109,4 @@ This project is licensed under the **MIT License**.
 
 ## **📧 Contact Information** 📬📩🌍
 
-📩 **Email:** [Voona Sriraj](mailto\:srirajvoona2004@gmail.com)\
-🐙 **GitHub:** [github-repo]([https://github.com/your-repo](https://github.com/VoonaSriraj/LLMOPS))
-
+📩 **Email:** [Voona Sriraj](mailto\:srirajvoona2004@gmail.com)
