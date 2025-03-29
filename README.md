@@ -109,4 +109,4 @@ This project is licensed under the **MIT License**.
 
 ## **📧 Contact Information** 📬📩🌍
 
-📩 **Email:** [Voona Sriraj](mailto\:srirajvoona2004@gmail.com)
+📩 **Email:** [srirajvoona2004@gmail.com](mailto\:srirajvoona2004@gmail.com)
