@@ -18,12 +18,22 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Ensures all files are pulled
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Lint code
-        run: echo "Linting repository"
+        run: npm run lint
 
       - name: Run unit tests
-        run: echo "Running unit tests"
+        run: npm test
 
   build-and-push-ecr-image:
     name: Continuous Delivery
@@ -32,7 +42,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        
+        with:
+          fetch-depth: 0  # Ensures the Dockerfile is pulled
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -42,14 +54,27 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          IMAGE_TAG: latest
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          ECR_REPO_URI: ${{ secrets.AWS_ECR_REPO_URI }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          docker build -t ${{ secrets.AWS_ECR_REPO_URI }}:$IMAGE_TAG .
-          docker push ${{ secrets.AWS_ECR_REPO_URI }}:$IMAGE_TAG
+          # Ensure Dockerfile exists
+          if [ ! -f Dockerfile ]; then
+            echo "Dockerfile not found!"
+            exit 1
+          fi
+
+          # Build the Docker image
+          docker build -t $ECR_REPO_URI:$IMAGE_TAG .
+
+          # Push the Docker image to ECR
+          docker push $ECR_REPO_URI:$IMAGE_TAG
+
+          # Optionally, tag the image as "latest"
+          docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
+          docker push $ECR_REPO_URI:latest
